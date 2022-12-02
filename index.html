@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>javascript mod</title>
+
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+
+      body {
+        width: 50%;
+        max-width: 800px;
+        min-width: 480px;
+        margin: 0 auto;
+      }
+
+      .form input[type="number"] {
+        width: 200px;
+      }
+
+      .lastResult {
+        color: white;
+        padding: 3px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Number guessing game</h1>
+
+    <p>
+      We have selected a random number between 1 and 1000. See if you can guess
+      it. We'll tell you if your guess was too high or too low.
+    </p>
+
+    <div class="form">
+      <label for="guessField">Enter a mod guess: </label>
+      <input
+        type="number"
+        min="1"
+        max="99"
+        required=""
+        id="guessField"
+        class="guessField"
+      />
+      <input
+        type="submit"
+        value="Submit mod guess"
+        class="guessSubmit"
+      /><br /><br />
+
+      <label for="finalGuessField">Enter a final guess: </label>
+      <input
+        type="number"
+        min="1"
+        max="1000"
+        required=""
+        id="finalGuessField"
+        class="finalGuessField"
+      />
+      <input
+        type="submit"
+        value="Submit final guess"
+        class="finalGuessSubmit"
+      />
+    </div>
+
+    <div class="resultParas">
+      <p class="guesses"></p>
+      <p class="mods"></p>
+      <p class="lastResult"></p>
+      <p class="lowOrHi"></p>
+    </div>
+
+    <script>
+      let randomNumber = Math.floor(Math.random() * 1000) + 1;
+      const guesses = document.querySelector(".guesses");
+      const mods = document.querySelector(".mods");
+
+      const lastResult = document.querySelector(".lastResult");
+
+      const guessSubmit = document.querySelector(".guessSubmit");
+      const guessField = document.querySelector(".guessField");
+
+      const finalGuessSubmit = document.querySelector(".finalGuessSubmit");
+      const finalGuessField = document.querySelector(".finalGuessField");
+
+      let guessCount = 1;
+      let resetButton;
+
+      function checkModGuess() {
+        if (guessCount === 1) {
+          guesses.textContent = "Previous mod numbers guesses: ";
+        }
+        const userModGuess = Number(guessField.value);
+        guesses.textContent += userModGuess + " ";
+
+        if (guessCount === 1) {
+          mods.textContent = "Previous equals mods guesses: ";
+        }
+        const mod = randomNumber % userModGuess;
+        mods.textContent += mod + " ";
+
+        guessCount++;
+        guessField.value = "";
+        guessField.focus();
+      }
+
+      function checkFinalGuess() {
+        const userFinalGuess = Number(finalGuessField.value);
+        if (userFinalGuess === randomNumber) {
+          lastResult.textContent = "Congratulations! You got it right!";
+          lastResult.style.backgroundColor = "green";
+          setGameOver();
+        } else {
+          lastResult.textContent = "!!!GAME OVER!!!";
+          lastResult.style.backgroundColor = "red";
+          setGameOver();
+        }
+      }
+
+      guessSubmit.addEventListener("click", checkModGuess);
+      finalGuessSubmit.addEventListener("click", checkFinalGuess);
+      resetButton = document.createElement("button");
+      resetButton.textContent = "Start new game";
+      document.body.appendChild(resetButton);
+      resetButton.addEventListener("click", resetGame);
+
+      function setGameOver() {
+        guessField.disabled = true;
+        guessSubmit.disabled = true;
+        finalGuessField.disabled = true;
+        finalGuessSubmit.disabled = true;
+        resetButton.addEventListener("click", resetGame);
+      }
+
+      function resetGame() {
+        guessCount = 1;
+        const resetParas = document.querySelectorAll(".resultParas p");
+        for (const resetPara of resetParas) {
+          resetPara.textContent = "";
+        }
+
+        resetButton.parentNode.removeChild(resetButton);
+        guessField.disabled = false;
+        guessSubmit.disabled = false;
+        finalGuessField.disabled = false;
+        finalGuessSubmit.disabled = false;
+        guessField.value = "";
+        guessField.focus();
+        finalGuessField.value = "";
+        lastResult.style.backgroundColor = "white";
+        randomNumber = Math.floor(Math.random() * 1000) + 1;
+        resetButton = document.createElement("button");
+        resetButton.textContent = "Start new game";
+        document.body.appendChild(resetButton);
+        resetButton.addEventListener("click", resetGame);
+        guesses.textContent = randomNumber;
+      }
+    </script>
+  </body>
+</html>
