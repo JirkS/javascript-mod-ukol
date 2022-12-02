@@ -73,7 +73,6 @@
       <p class="guesses"></p>
       <p class="mods"></p>
       <p class="lastResult"></p>
-      <p class="lowOrHi"></p>
     </div>
 
     <script>
@@ -135,6 +134,7 @@
         guessSubmit.disabled = true;
         finalGuessField.disabled = true;
         finalGuessSubmit.disabled = true;
+        lastResult.textContent += " The number was " + randomNumber;
         resetButton.addEventListener("click", resetGame);
       }
 
